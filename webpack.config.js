@@ -3,7 +3,7 @@ import path from 'path';
 
 export default {
   entry: [
-    path.join(__dirname, 'app/src/index')
+    path.join(__dirname, 'app/src/app')
   ],
   output: {
     path: path.join(__dirname, 'app/dist')
