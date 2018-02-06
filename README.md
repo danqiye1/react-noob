@@ -75,6 +75,12 @@ Now we can add an npm script to start the Express server that we wrote in 2.
     "start": "babel-node server/server.js",
 },
 ```
+We also need to create a .babelrc file to load the ES6 presets for babel:
+```
+{
+  "presets":["env"]
+}
+```
 Try running the server with
 ```
 npm start
