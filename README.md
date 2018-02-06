@@ -123,7 +123,7 @@ ReactDOM.render(
 );
 ```
 We are just adding a simple bootstrap jumbotron using React for a start. We attach the whole react app to an element with id of 'app' at the end.
-We now need to create the element with id 'app' in index.html. We also attach the 'index.js' script first, although it does not work for now.
+We now need to create the element with id 'app' in index.html. We also attach the 'bundle.js' script first, although it does not exist for now.
 
 ```html
 <!doctype html>
@@ -258,5 +258,92 @@ app.listen(3000);
 With this, the development environment should be ready to go. Try it:
 ```
 npm start
-``
+```
+
+## 9. Setup for production build.
+To deploy the app to production, we would need an actual "bundle.js" served rather than the virtual one served from memory.
+
+First, create a separate "webpack.config.prod.js" for production build:
+```javascript
+import webpack from 'webpack';
+import path from 'path';
+
+export default {
+  entry: [
+    path.join(__dirname, 'app/src/index')
+  ],
+  output: {
+    path: path.join(__dirname, 'app/dist'),
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      {test: /\.js$/, include: path.join(__dirname, "app/src"), use:['babel-loader']},
+      {test: /\.css$/, loaders: ['style', 'css']}
+    ]
+  },
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin({sourceMap: true})
+  ]
+};
+```
+Notice we removed the development middleware plugins and added the minification plugin. Additional plugins can be used here, such as file hashing, sass compilation or html plugin. Also, instead of publicPath in output, we declare an actual path in filesystem to dump our bundle.js.
+
+Next, create a "server/build.js" for building with webpack outside express:
+```javascript
+import webpack from 'webpack';
+import config from '../webpack.config.prod';
+
+webpack(config).run((err, stats) => {
+  if (err){
+    console.log(err);
+    return 1;
+  }
+});
+```
+
+Finally, we add the build script to package.json:
+```
+"scripts": {
+  "start": "babel-node server/devServer.js",
+  "build": "babel-node server/build.js",
+}
+```
+
+Run "npm run build" to see the minified bundle.js in "app/dist/"
+
+## 10. Time to serve!
+Create a "server/prodServer.js" as our Express production server:
+
+```javascript
+import express from 'express';
+import path from 'path';
+
+const app = express();
+
+app.use(express.static(path.join(__dirname,'../app/dist')));
+
+// Generic endpoint index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, "../app/index.html"));
+});
+
+app.listen(3000);
+```
+
+Add a new npm script for serving the bundle:
+```
+"scripts": {
+  "start": "babel-node server/devServer.js",
+  "build": "babel-node server/build.js",
+  "serve": "babel-node server/prodServer.js"
+}
+```
+
+Run:
+```
+npm run serve
+```
+
+Of course, you may choose to use any backend at this point (django, ruby-on-rails, etc) other than Express to serve "app/index.html" and "app/dist/bundle.js" to the browser.
 

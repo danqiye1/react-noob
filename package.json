@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node server/devServer.js",
-    "build": "babel-node server/build.js"
+    "build": "babel-node server/build.js",
+    "serve": "babel-node server/prodServer.js"
   },
   "author": "",
   "license": "ISC",
