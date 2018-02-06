@@ -347,3 +347,5 @@ npm run serve
 
 Of course, you may choose to use any backend at this point (django, ruby-on-rails, etc) other than Express to serve "app/index.html" and "app/dist/bundle.js" to the browser.
 
+## Final words
+This is a minimalistic development environment for react, with the main aim of de-mystifying some of the magic most react starter-kit has. For a better react dev environment (albeit more magic), use create-react-app.
