@@ -4,7 +4,8 @@
   "description": "A react workspace for building UI.",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node server/server.js"
+    "start": "babel-node server/devServer.js",
+    "build": "babel-node server/build.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,7 +17,11 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
-    "webpack": "^3.10.0"
+    "babel-preset-react": "^6.24.1",
+    "webpack": "^3.10.0",
+    "webpack-dev-middleware": "^2.0.4",
+    "webpack-hot-middleware": "^2.21.0"
   }
 }
