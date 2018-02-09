@@ -347,5 +347,25 @@ npm run serve
 
 Of course, you may choose to use any backend at this point (django, ruby-on-rails, etc) other than Express to serve "app/index.html" and "app/dist/bundle.js" to the browser.
 
+## 11. Optional: Enhanced hot reloading for react.
+At the moment in dev mode, we have to refresh the page everytime we save some changes (although webpack-hot-middleware allows us not to spin up dev server every time). We want the changes to be reflected by browser without manual page refresh.
+For this, install the following:
+
+```
+npm install --save-dev babel-preset-react-hmre
+```
+
+and change the following to .babelrc
+```
+{
+  "presets": ["react", "env"],
+  "env": {
+    "development": {
+      "presets": ["react-hmre"]
+    }
+  }
+}
+```
+
 ## Final words
 This is a minimalistic development environment for react, with the main aim of de-mystifying some of the magic most react starter-kit has. For a better react dev environment (albeit more magic), use create-react-app.
